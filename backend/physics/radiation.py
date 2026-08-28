@@ -1,10 +1,13 @@
-def calculate_radiation_exposure(
+def calculate_radiation_exposure_index(
     particle_flux: float,
     particle_energy: float,
     exposure_time: float,
 ) -> float:
     """
-    Calculate a simplified radiation exposure indicator.
+    Calculate a simplified radiation exposure index.
+
+    This is an environmental indicator for CONFLUX.
+    It is NOT a physical absorbed-dose calculation.
 
     Parameters:
         particle_flux: Particle flux.
@@ -12,7 +15,7 @@ def calculate_radiation_exposure(
         exposure_time: Exposure duration in seconds.
 
     Returns:
-        Simplified radiation exposure score.
+        Radiation exposure index.
     """
 
     if particle_flux < 0:
@@ -24,10 +27,4 @@ def calculate_radiation_exposure(
     if exposure_time < 0:
         raise ValueError("Exposure time cannot be negative.")
 
-    exposure = (
-        particle_flux
-        * particle_energy
-        * exposure_time
-    )
-
-    return exposure
+    return particle_flux * particle_energy * exposure_time

@@ -13,11 +13,30 @@ class MissionState(BaseModel):
         default=0.0,
         ge=0,
         le=1,
-        description="Overall mission risk score"
+        description="Overall mission risk score",
     )
 
-    active_anomalies: list[str] = Field(default_factory=list)
+    active_anomalies: list[str] = Field(
+        default_factory=list,
+        description="Currently detected anomalies",
+    )
 
-    affected_systems: list[str] = Field(default_factory=list)
+    affected_systems: list[str] = Field(
+        default_factory=list,
+        description="Spacecraft or mission systems affected by anomalies",
+    )
 
-    summary: str | None = None
+    evidence: list[str] = Field(
+        default_factory=list,
+        description="Evidence contributing to the current mission assessment",
+    )
+
+    recommended_actions: list[str] = Field(
+        default_factory=list,
+        description="Actions recommended by the decision system",
+    )
+
+    summary: str | None = Field(
+        default=None,
+        description="Human-readable summary of the current mission state",
+    )

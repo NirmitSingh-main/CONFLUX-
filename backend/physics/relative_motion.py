@@ -3,55 +3,75 @@ import numpy as np
 from backend.models.orbital import OrbitalState
 
 
+def _position_vector(state: OrbitalState) -> np.ndarray:
+    """Convert an orbital position into a NumPy vector."""
+
+    return np.array(
+        [
+            state.position.x,
+            state.position.y,
+            state.position.z,
+        ],
+        dtype=float,
+    )
+
+
+def _velocity_vector(state: OrbitalState) -> np.ndarray:
+    """Convert an orbital velocity into a NumPy vector."""
+
+    return np.array(
+        [
+            state.velocity.x,
+            state.velocity.y,
+            state.velocity.z,
+        ],
+        dtype=float,
+    )
+
+
 def calculate_relative_position(
     state1: OrbitalState,
     state2: OrbitalState,
 ) -> np.ndarray:
-    """Calculate relative position of object 2 with respect to object 1."""
+    """
+    Calculate the position of object 2 relative to object 1.
 
-    position1 = np.array([
-        state1.position.x,
-        state1.position.y,
-        state1.position.z,
-    ], dtype=float)
+    Returns:
+        Relative position vector in kilometers.
+    """
 
-    position2 = np.array([
-        state2.position.x,
-        state2.position.y,
-        state2.position.z,
-    ], dtype=float)
-
-    return position2 - position1
+    return _position_vector(state2) - _position_vector(state1)
 
 
 def calculate_relative_velocity(
     state1: OrbitalState,
     state2: OrbitalState,
 ) -> np.ndarray:
-    """Calculate relative velocity of object 2 with respect to object 1."""
+    """
+    Calculate the velocity of object 2 relative to object 1.
 
-    velocity1 = np.array([
-        state1.velocity.x,
-        state1.velocity.y,
-        state1.velocity.z,
-    ], dtype=float)
+    Returns:
+        Relative velocity vector in kilometers per second.
+    """
 
-    velocity2 = np.array([
-        state2.velocity.x,
-        state2.velocity.y,
-        state2.velocity.z,
-    ], dtype=float)
-
-    return velocity2 - velocity1
+    return _velocity_vector(state2) - _velocity_vector(state1)
 
 
 def calculate_distance(
     state1: OrbitalState,
     state2: OrbitalState,
 ) -> float:
-    """Calculate distance between two objects."""
+    """
+    Calculate the distance between two orbital objects.
 
-    relative_position = calculate_relative_position(state1, state2)
+    Returns:
+        Distance in kilometers.
+    """
+
+    relative_position = calculate_relative_position(
+        state1,
+        state2,
+    )
 
     return float(np.linalg.norm(relative_position))
 
@@ -61,21 +81,37 @@ def calculate_time_to_closest_approach(
     state2: OrbitalState,
 ) -> float:
     """
-    Estimate time until closest approach assuming
+    Estimate time to closest approach assuming
     constant relative velocity.
+
+    Returns:
+        Time to closest approach in seconds.
+
+        Positive value  -> closest approach is in the future.
+        Negative value  -> closest approach was in the past.
+        Zero             -> objects are currently at closest approach.
     """
 
-    relative_position = calculate_relative_position(state1, state2)
-    relative_velocity = calculate_relative_velocity(state1, state2)
+    relative_position = calculate_relative_position(
+        state1,
+        state2,
+    )
 
-    velocity_squared = np.dot(relative_velocity, relative_velocity)
+    relative_velocity = calculate_relative_velocity(
+        state1,
+        state2,
+    )
 
-    if velocity_squared == 0:
+    velocity_squared = float(
+        np.dot(relative_velocity, relative_velocity)
+    )
+
+    # Objects have no relative motion.
+    if np.isclose(velocity_squared, 0.0):
         return 0.0
 
-    time_to_ca = -np.dot(
-        relative_position,
-        relative_velocity,
+    time_to_ca = -float(
+        np.dot(relative_position, relative_velocity)
     ) / velocity_squared
 
-    return float(time_to_ca)
+    return time_to_ca

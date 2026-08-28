@@ -13,19 +13,24 @@ class Decision(BaseModel):
     risk_score: float = Field(
         ge=0,
         le=1,
-        description="Estimated risk associated with the current mission condition"
+        description="Estimated risk associated with the current mission condition",
     )
 
     confidence: float = Field(
         ge=0,
         le=1,
-        description="Confidence in the proposed decision"
+        description="Confidence in the proposed decision",
     )
 
     expected_benefit: float = Field(
         ge=0,
         le=1,
-        description="Estimated benefit of taking the proposed action"
+        description="Estimated benefit of taking the proposed action",
     )
 
     safety_validated: bool = False
+
+    evidence: list[str] = Field(
+        default_factory=list,
+        description="Signals and findings supporting the decision",
+    )

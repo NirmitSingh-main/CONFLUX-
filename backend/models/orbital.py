@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class Vector3D(BaseModel):
@@ -12,5 +12,11 @@ class Vector3D(BaseModel):
 class OrbitalState(BaseModel):
     object_id: str
     timestamp: datetime
-    position: Vector3D
-    velocity: Vector3D
+
+    position: Vector3D = Field(
+        description="Position vector in kilometers",
+    )
+
+    velocity: Vector3D = Field(
+        description="Velocity vector in kilometers per second",
+    )
