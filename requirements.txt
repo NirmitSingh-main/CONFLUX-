@@ -1,0 +1,4 @@
+numpy
+pydantic
+scikit-learn
+PyWavelets
