@@ -1,4 +1,7 @@
 numpy
-pydantic
+pandas
 scikit-learn
+joblib
+pydantic
 PyWavelets
+opencv-python

@@ -5,22 +5,12 @@ class MultimodalFusion:
     """
     Combine observations from CONFLUX intelligence modules.
 
-    The fusion layer preserves evidence from each modality
-    and identifies agreement between independent observations.
+    Each modality remains individually identifiable.
+    The fusion layer detects agreement between independent
+    observations.
 
-    It does not generate arbitrary risk or confidence scores.
+    No artificial risk or confidence score is generated.
     """
-
-    def __init__(
-        self,
-        anomaly_threshold: float = 0.5,
-    ):
-        if not 0 <= anomaly_threshold <= 1:
-            raise ValueError(
-                "Anomaly threshold must be between 0 and 1."
-            )
-
-        self.anomaly_threshold = anomaly_threshold
 
     def _contains_anomaly(
         self,
@@ -30,15 +20,19 @@ class MultimodalFusion:
         Determine whether a module reports an abnormal event.
         """
 
+        # Telemetry / Wavefront / Thermal
         if result.get("anomaly_detected") is True:
             return True
 
+        # Space Weather
         if result.get("environmental_anomaly") is True:
             return True
 
+        # Orbital
         if result.get("collision_risk") is True:
             return True
 
+        # Modules using explicit status values
         if result.get("status") in {
             "WARNING",
             "CRITICAL",
@@ -46,16 +40,12 @@ class MultimodalFusion:
         }:
             return True
 
+        # Existing explicit risk-level output
         if result.get("risk_level") in {
             "HIGH",
             "CRITICAL",
         }:
             return True
-
-        score = result.get("anomaly_score")
-
-        if isinstance(score, (int, float)):
-            return score >= self.anomaly_threshold
 
         return False
 
@@ -70,8 +60,8 @@ class MultimodalFusion:
         """
         Combine available modality observations.
 
-        Each modality remains individually identifiable so
-        downstream mission logic can determine what happened.
+        No modality is discarded or converted into an
+        artificial numerical risk score.
         """
 
         observations = {
@@ -100,17 +90,27 @@ class MultimodalFusion:
             if not self._contains_anomaly(result)
         ]
 
+        anomaly_count = len(
+            anomalous_modalities
+        )
+
         return {
             "observations": available_observations,
+
             "available_modalities": list(
                 available_observations.keys()
             ),
-            "anomalous_modalities": anomalous_modalities,
-            "normal_modalities": normal_modalities,
-            "anomaly_count": len(
-                anomalous_modalities
-            ),
+
+            "anomalous_modalities":
+                anomalous_modalities,
+
+            "normal_modalities":
+                normal_modalities,
+
+            "anomaly_count":
+                anomaly_count,
+
             "multi_modal_agreement": (
-                len(anomalous_modalities) >= 2
+                anomaly_count >= 2
             ),
         }
