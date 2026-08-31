@@ -1,13 +1,18 @@
+# Numerical analysis and machine learning
 numpy
 pandas
 scikit-learn
 joblib
-pydantic
+
+# Backend runtime and validation
 fastapi
 uvicorn
 pytest
 httpx
 pypdf
+
+# Domain processing and persistence
+pydantic
 PyWavelets
 opencv-python
 sqlalchemy

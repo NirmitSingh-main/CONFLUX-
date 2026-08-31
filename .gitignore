@@ -1,21 +1,8 @@
-
----
-
-# `.gitignore`
-
-Use this:
-
-```gitignore
-# =========================================================
 # Python
-# =========================================================
-
 __pycache__/
 *.py[cod]
 *.pyo
 *.pyd
-
-# Virtual environments
 .venv/
 venv/
 env/
@@ -23,97 +10,63 @@ ENV/
 
 # Python packaging
 *.egg-info/
-build/
-dist/
 .eggs/
 
-# =========================================================
-# Environment / Secrets
-# =========================================================
-
+# Environment and secrets
 .env
 .env.*
 !.env.example
 
-# =========================================================
-# Jupyter
-# =========================================================
+# Python packaging and generated output
+build/
+dist/
+outputs/
 
-.ipynb_checkpoints/
-
-# =========================================================
-# Machine Learning Models
-# =========================================================
-
+# Machine-learning artifacts
 *.pt
 *.pth
 *.ckpt
 *.onnx
 *.joblib
 *.pkl
-
-# Keep model metadata
 !models/metadata/
 
-# =========================================================
-# Large / Local Data
-# =========================================================
-
-# Ignore raw and processed datasets by default
+# Local databases and runtime data
+*.db
+*.sqlite
+*.sqlite3
 data/raw/
 data/processed/
 
-# Ignore large files accidentally placed in data folders
-*.h5
-*.hdf5
-*.parquet
-*.feather
-
-# =========================================================
-# Generated Outputs
-# =========================================================
-
-outputs/
+# Generated media and large data files
 *.png
 *.jpg
 *.jpeg
 *.gif
 *.mp4
+*.h5
+*.hdf5
+*.parquet
+*.feather
 
-# =========================================================
 # Frontend
-# =========================================================
-
 node_modules/
 frontend/node_modules/
 frontend/dist/
 frontend/.vite/
 
-# =========================================================
-# IDE
-# =========================================================
-
+# IDE and operating system
 .vscode/
 .idea/
-
-# =========================================================
-# Operating System
-# =========================================================
-
 .DS_Store
 Thumbs.db
 
-# =========================================================
-# Personal Learning Notes
-# =========================================================
-
-/learning/
-
-# =========================================================
-# Temporary Files
-# =========================================================
-
+# Temporary files and logs
 *.log
 *.tmp
 *.temp
 *.swp
+.ipynb_checkpoints/
+
+# Personal learning notes
+/learning/
