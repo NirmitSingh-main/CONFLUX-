@@ -489,6 +489,6 @@ The RAG layer uses the current mission context so that retrieved information cor
 
 # 📌 Status
 
-> **CONFLUX is currently under development.**
+> **CONFLUX is Completed**
 
 The goal is to transform large volumes of heterogeneous space data into clear, explainable, and actionable mission intelligence.
