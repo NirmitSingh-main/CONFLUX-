@@ -241,13 +241,12 @@ class WavefrontAnomalyDetector:
         # Statistical deviation from normal baseline.
         # ---------------------------------------------
 
-        z_scores = np.abs(
-            (
-                features
-                - self.feature_mean
-            )
-            / self.feature_std
-        )
+        signed_z_scores = (
+            features
+            - self.feature_mean
+        ) / self.feature_std
+        z_scores = np.abs(signed_z_scores)
+        z_scores[0] = max(float(signed_z_scores[0]), 0.0)
 
         max_z_score = float(
             np.max(z_scores)

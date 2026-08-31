@@ -1,0 +1,109 @@
+@import "tailwindcss";
+
+:root {
+  /* Dark space-console default - Near-black obsidian palette */
+  --bg-page: #0A0A0B;
+  --bg-sidebar: #111114;
+  --bg-header: rgba(13, 13, 16, 0.88);
+  --bg-card: #111114;
+  --bg-card-sub: #16161A;
+  --bg-card-hover: #1A1A1E;
+  --bg-input: #0E0E12;
+  --border-subtle: #1F1F23;
+  --border-card: #1F1F23;
+  --border-card-hover: #2E2E35;
+  --text-primary: #F1F5F9;
+  --text-secondary: #94A3B8;
+  --text-muted: #64748B;
+  --accent-cyan: #00D1FF;
+  --accent-cyan-bg: rgba(0, 209, 255, 0.08);
+  --accent-cyan-border: rgba(0, 209, 255, 0.25);
+  --status-nominal-text: #34D399;
+  --status-nominal-bg: rgba(16, 185, 129, 0.1);
+  --status-nominal-border: rgba(16, 185, 129, 0.25);
+  --status-warning-text: #FBBF24;
+  --status-warning-bg: rgba(245, 158, 11, 0.1);
+  --status-warning-border: rgba(245, 158, 11, 0.25);
+  --status-critical-text: #F87171;
+  --status-critical-bg: rgba(239, 68, 68, 0.1);
+  --status-critical-border: rgba(239, 68, 68, 0.25);
+  --scrollbar-bg: #0A0A0B;
+  --scrollbar-thumb: #1F1F23;
+}
+
+html.light, body.light, .light {
+  /* Light crisp aerospace console */
+  --bg-page: #F8FAFC;
+  --bg-sidebar: #FFFFFF;
+  --bg-header: rgba(255, 255, 255, 0.92);
+  --bg-card: #FFFFFF;
+  --bg-card-sub: #F1F5F9;
+  --bg-card-hover: #E2E8F0;
+  --bg-input: #FFFFFF;
+  --border-subtle: #E2E8F0;
+  --border-card: #E2E8F0;
+  --border-card-hover: #CBD5E1;
+  --text-primary: #0F172A;
+  --text-secondary: #334155;
+  --text-muted: #64748B;
+  --accent-cyan: #0284C7;
+  --accent-cyan-bg: rgba(2, 132, 199, 0.08);
+  --accent-cyan-border: rgba(2, 132, 199, 0.25);
+  --status-nominal-text: #059669;
+  --status-nominal-bg: rgba(5, 150, 105, 0.1);
+  --status-nominal-border: rgba(5, 150, 105, 0.25);
+  --status-warning-text: #D97706;
+  --status-warning-bg: rgba(217, 119, 6, 0.1);
+  --status-warning-border: rgba(217, 119, 6, 0.25);
+  --status-critical-text: #DC2626;
+  --status-critical-bg: rgba(220, 38, 38, 0.1);
+  --status-critical-border: rgba(220, 38, 38, 0.25);
+  --scrollbar-bg: #F1F5F9;
+  --scrollbar-thumb: #CBD5E1;
+}
+
+@layer base {
+  body {
+    background-color: var(--bg-page);
+    color: var(--text-primary);
+    font-family: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
+    transition: background-color 0.15s ease, color 0.15s ease;
+  }
+}
+
+/* Theme Utility Classes */
+.bg-theme-page { background-color: var(--bg-page); }
+.bg-theme-sidebar { background-color: var(--bg-sidebar); }
+.bg-theme-header { background-color: var(--bg-header); }
+.bg-theme-card { background-color: var(--bg-card); }
+.bg-theme-card-sub { background-color: var(--bg-card-sub); }
+.bg-theme-card-hover { background-color: var(--bg-card-hover); }
+.bg-theme-input { background-color: var(--bg-input); }
+.border-theme-subtle { border-color: var(--border-subtle); }
+.border-theme-card { border-color: var(--border-card); }
+.border-theme-hover { border-color: var(--border-card-hover); }
+.text-theme-primary { color: var(--text-primary); }
+.text-theme-secondary { color: var(--text-secondary); }
+.text-theme-muted { color: var(--text-muted); }
+.text-theme-cyan { color: var(--accent-cyan); }
+.bg-theme-cyan-subtle { background-color: var(--accent-cyan-bg); }
+.border-theme-cyan { border-color: var(--accent-cyan-border); }
+
+/* Minimal theme scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--scrollbar-bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--border-card-hover);
+}

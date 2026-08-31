@@ -3,7 +3,12 @@ from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
 from backend.database.database import get_db
-from backend.database.models import Mission
+from backend.database.models import (
+    Mission,
+    Observation,
+    AnomalyEvent,
+    FusionEvent,
+)
 
 
 router = APIRouter()
@@ -97,3 +102,90 @@ def get_mission(
         "status": mission.status,
         "created_at": mission.created_at,
     }
+
+
+# --------------------------------------------------
+# Get observations for a mission
+# --------------------------------------------------
+
+@router.get("/{mission_id}/observations")
+def get_mission_observations(
+    mission_id: int,
+    db: Session = Depends(get_db),
+):
+    observations = (
+        db.query(Observation)
+        .filter(Observation.mission_id == mission_id)
+        .order_by(Observation.created_at.desc())
+        .all()
+    )
+
+    return [
+        {
+            "id": obs.id,
+            "mission_id": obs.mission_id,
+            "modality": obs.modality,
+            "value": obs.value,
+            "event": obs.event,
+            "created_at": obs.created_at,
+        }
+        for obs in observations
+    ]
+
+
+# --------------------------------------------------
+# Get anomaly events for a mission
+# --------------------------------------------------
+
+@router.get("/{mission_id}/anomalies")
+def get_mission_anomalies(
+    mission_id: int,
+    db: Session = Depends(get_db),
+):
+    anomalies = (
+        db.query(AnomalyEvent)
+        .filter(AnomalyEvent.mission_id == mission_id)
+        .order_by(AnomalyEvent.created_at.desc())
+        .all()
+    )
+
+    return [
+        {
+            "id": a.id,
+            "mission_id": a.mission_id,
+            "modality": a.modality,
+            "anomaly_type": a.anomaly_type,
+            "description": a.description,
+            "created_at": a.created_at,
+        }
+        for a in anomalies
+    ]
+
+
+# --------------------------------------------------
+# Get fusion events for a mission
+# --------------------------------------------------
+
+@router.get("/{mission_id}/fusion")
+def get_mission_fusion_events(
+    mission_id: int,
+    db: Session = Depends(get_db),
+):
+    fusion_events = (
+        db.query(FusionEvent)
+        .filter(FusionEvent.mission_id == mission_id)
+        .order_by(FusionEvent.created_at.desc())
+        .all()
+    )
+
+    return [
+        {
+            "id": fe.id,
+            "mission_id": fe.mission_id,
+            "anomaly_count": fe.anomaly_count,
+            "multi_modal_agreement": fe.multi_modal_agreement,
+            "anomalous_modalities": fe.anomalous_modalities.split(",") if fe.anomalous_modalities else [],
+            "created_at": fe.created_at,
+        }
+        for fe in fusion_events
+    ]

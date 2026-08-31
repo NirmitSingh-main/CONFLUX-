@@ -3,6 +3,11 @@ pandas
 scikit-learn
 joblib
 pydantic
+fastapi
+uvicorn
+pytest
+httpx
+pypdf
 PyWavelets
 opencv-python
 sqlalchemy
