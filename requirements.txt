@@ -5,3 +5,5 @@ joblib
 pydantic
 PyWavelets
 opencv-python
+sqlalchemy
+python-multipart
