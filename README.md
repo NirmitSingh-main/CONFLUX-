@@ -275,6 +275,8 @@ Install the following before running the project:
 - **Node.js + npm**
 - **Git**
 
+> The project uses generated ML model files such as `.joblib` and `.pkl`. These are intentionally kept out of Git in the `.gitignore` file because they are trained output artifacts, not source code.
+
 ---
 
 ## 1. Clone the Repository
@@ -284,11 +286,13 @@ git clone <your-repository-url>
 cd CONFLUX
 ```
 
+This gets the full project and all source files onto your machine.
+
 ---
 
-## 2. Set Up the Backend
+## 2. Set Up the Python Environment
 
-Create a Python virtual environment.
+Create and activate a virtual environment.
 
 ### Windows PowerShell
 
@@ -297,25 +301,89 @@ python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 ```
 
+### macOS / Linux
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+```
+
 Install the backend dependencies:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-Start the FastAPI backend:
+This installs the FastAPI backend, ML libraries, data processing tools, and the packages used by the intelligence models.
+
+---
+
+## 3. Train the AI Models First
+
+Before starting the API, you need to create the trained model files in the `models/` directory.
+
+These model files are generated during training and are not committed to Git because they are machine-learning artifacts.
+
+### 3.1 Train the telemetry anomaly detector
+
+```bash
+python backend/intelligence/train_telemetry.py
+```
+
+This trains an Isolation Forest on spacecraft telemetry and saves the model to `models/telemetry_isolation_forest.joblib`.
+It is used to detect abnormal telemetry patterns such as temperature, voltage, current, or pressure spikes.
+
+### 3.2 Train the wavefront detector
+
+```bash
+python backend/intelligence/train_wavefront.py
+```
+
+This trains the wavefront anomaly detector using normal wavefront observations and saves it to `models/wavefront_detector.pkl`.
+It helps detect unusual optical distortion or signal changes across the wavefront sensor data.
+
+### 3.3 Train the space-weather detector
+
+```bash
+python backend/intelligence/train_space_weather.py
+```
+
+This learns thresholds from normal space-weather behavior and evaluates environmental anomaly detection.
+It is used to flag risky solar and radiation conditions that may affect the mission.
+
+### Optional: regenerate synthetic datasets
+
+If you want fresh sample data instead of using the pre-generated CSVs, you can rerun the dataset generators.
+
+```bash
+python data/wavefront/generate_dataset.py
+python data/space_weather/generate_dataset.py
+```
+
+These scripts create synthetic wavefront and space-weather data for experimentation and model testing.
+The telemetry dataset is already included in the repo as `data/telemetry/telemetry_dataset_500.csv`, so there is no separate telemetry generator script to rerun here unless you add one yourself.
+
+> If you skip the training steps, the backend may not have the model files it expects at runtime.
+
+---
+
+## 4. Start the Backend
+
+From the project root:
 
 ```bash
 uvicorn backend.main:app --reload
 ```
 
-### Backend
+This starts the FastAPI backend used for telemetry, orbit, weather, fusion, mission, and RAG endpoints.
+
+### Backend URL
 
 ```text
 http://127.0.0.1:8000
 ```
 
-### FastAPI Documentation
+### API Docs
 
 ```text
 http://127.0.0.1:8000/docs
@@ -323,29 +391,19 @@ http://127.0.0.1:8000/docs
 
 ---
 
-## 3. Start the Frontend
+## 5. Start the Frontend
 
-Open a **new terminal**.
-
-Move into the frontend directory:
+Open a new terminal and run:
 
 ```bash
 cd frontend
-```
-
-Install frontend dependencies:
-
-```bash
 npm install
-```
-
-Start the Vite development server:
-
-```bash
 npm run dev
 ```
 
-Open the local URL displayed by Vite, typically:
+This starts the React + Vite dashboard used to visualize mission data and interact with the backend.
+
+Open the URL shown in the terminal, usually:
 
 ```text
 http://localhost:5173
@@ -353,9 +411,9 @@ http://localhost:5173
 
 ---
 
-## 4. Run CONFLUX
+## 6. Run the Full Project
 
-Both the backend and frontend should be running during development.
+Both the backend and frontend should be running at the same time.
 
 ```text
 ┌─────────────────────────┐
@@ -390,7 +448,37 @@ Both the backend and frontend should be running during development.
 └─────────────────────────┘
 ```
 
-Select a mission in the frontend to explore the available modality analyses, Fusion assessment, and RAG technical context.
+Select a mission in the frontend to explore the available modality analyses, fusion assessment, and mission intelligence features.
+
+---
+
+## 7. Optional: Run the Test Suite
+
+From the project root:
+
+```bash
+pytest -q
+```
+
+From the `frontend` directory:
+
+```bash
+npm run lint
+npm run build
+```
+
+These checks help verify the backend logic and the frontend build are still working correctly.
+
+---
+
+# 🔄 Recommended Development Workflow
+
+Keep two terminals open when working locally:
+
+1. One terminal for the backend (`uvicorn backend.main:app --reload`)
+2. One terminal for the frontend (`cd frontend && npm run dev`)
+
+This is the easiest way to develop and test the full system quickly.
 
 ---
 
