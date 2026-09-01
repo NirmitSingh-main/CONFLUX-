@@ -212,14 +212,18 @@ Final operational decisions remain with the human operator.
 
 | Technology | Role |
 |---|---|
-| **Python + FastAPI** | Backend and API services |
-| **React + Vite** | Mission dashboard |
-| **OpenCV / Computer Vision** | Infrared and thermal image analysis |
-| **Time-Series Analysis** | Telemetry analysis |
-| **Wavelet Signal Processing** | Wavefront signal analysis |
-| **Multimodal Fusion** | Mission-level assessment |
-| **Orbital Propagation / Physics** | Orbital and conjunction analysis |
-| **Retrieval-Augmented Generation (RAG)** | Grounded technical knowledge retrieval |
+| **Python** | Core backend logic, ML workflows, signal analysis, and mission intelligence |
+| **FastAPI + Uvicorn** | API services and backend runtime for the mission intelligence system |
+| **SQLAlchemy** | Database models and persistence for mission context and results |
+| **scikit-learn** | Isolation Forest and anomaly detection for telemetry, wavefront, and environmental signals |
+| **NumPy + Pandas** | Feature engineering, numerical modeling, and dataset processing |
+| **PyWavelets** | Multi-scale wavefront and signal analysis for transient anomaly detection |
+| **OpenCV** | Infrared and thermal image processing for visual anomaly detection |
+| **React + Vite** | Mission dashboard and interactive frontend experience |
+| **Joblib** | Saving and loading trained detection models |
+| **pypdf** | Retrieval and document knowledge handling for the RAG layer |
+| **RAG + Knowledge Retrieval** | Grounding mission analysis with technical space-domain context and evidence |
+| **Multimodal Fusion** | Combining telemetry, thermal, orbital, weather, and mission signals into a unified assessment |
 
 ---
 
@@ -253,14 +257,33 @@ Operational Guidance
 
 ```text
 CONFLUX/
-├── backend/          # Core application, AI, physics and mission logic
-├── data/             # Telemetry, infrared, wavefront, orbital and weather data
-├── models/           # Trained AI models
-├── knowledge/        # Space-domain knowledge
-├── frontend/         # Mission dashboard
-├── scripts/          # Data and model utilities
-├── tests/            # Testing
-└── docs/             # Documentation
+├── backend/                 # FastAPI app, AI, mission, safety, and physics logic
+│   ├── api/                 # REST API route modules
+│   ├── database/            # SQLAlchemy models and DB setup
+│   ├── intelligence/        # ML training and anomaly detection scripts
+│   ├── mission/             # Mission orchestration logic
+│   ├── optimization/        # Optimization and response planning
+│   ├── physics/             # Orbital and mission physics helpers
+│   ├── rag/                 # Retrieval-backed knowledge logic
+│   ├── safety/              # Constraint validation layer
+│   ├── services/            # Service layer for domain operations
+│   └── main.py              # FastAPI application entry point
+├── data/                    # Synthetic datasets for telemetry, wavefront, orbital, and weather
+│   ├── telemetry/
+│   ├── wavefront/
+│   ├── space_weather/
+│   └── orbital/
+├── models/                  # Generated trained model artifacts (.joblib, .pkl)
+├── frontend/                # React + Vite mission dashboard
+├── tests/                   # Backend and integration tests
+├── docs/                    # Project docs and design notes
+├── knowledge/               # Space-domain knowledge and grounding material
+├── scripts/                 # Utility scripts
+├── requirements.txt         # Python dependencies
+├── pyproject.toml           # Project metadata/configuration
+├── README.md                # Setup and usage documentation
+├── .gitignore               # Ignored generated files and local artifacts
+└── LICENSE                  # Project license
 ```
 
 ---
