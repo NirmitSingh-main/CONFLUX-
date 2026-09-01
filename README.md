@@ -189,26 +189,24 @@ Recommended Options
 Optimization and reinforcement-learning techniques can also be explored within the simulated environment to find better response strategies.
 
 ---
-
 # 🛡️ Safety Layer
 
-CONFLUX does not allow an AI model to directly control the spacecraft.
+The CONFLUX Safety Layer provides an additional validation stage for
+mission-related recommendations and decisions.
 
-AI-generated recommendations pass through a deterministic safety layer that checks mission and physical constraints.
+It checks proposed actions against the mission and physical constraints
+implemented in the system before they are presented to the operator.
 
-> **AI detects and proposes → Physics verifies → Simulation evaluates → Safety validates → Human decides.**
+The overall decision flow is:
 
----
+> **Analysis → Physics Validation → Safety Checks → Human Decision**
 
-# 🤖 AI Mission Copilot
+The Safety Layer is intended to prevent recommendations that violate
+defined mission constraints from being treated as valid operational
+options.
 
-CONFLUX can use an AI mission copilot to convert complex analysis into understandable mission information.
-
-The copilot can explain what happened, summarize the evidence, describe potential risks, and present possible responses.
-
-A knowledge and retrieval layer can provide relevant spacecraft, orbital, scientific, and safety information so that explanations are grounded in available mission knowledge.
-
----
+CONFLUX does not give an AI model direct control over the spacecraft.
+Final operational decisions remain with the human operator.
 
 # 🧰 Technology
 
@@ -216,16 +214,12 @@ A knowledge and retrieval layer can provide relevant spacecraft, orbital, scient
 |---|---|
 | **Python + FastAPI** | Backend and API services |
 | **React + Vite** | Mission dashboard |
-| **PyTorch + scikit-learn** | AI and machine-learning components |
-| **Computer Vision** | Infrared / thermal analysis |
-| **Time-Series Analysis** | Telemetry anomaly detection |
-| **Wavelet Signal Processing** | Wavefront / signal analysis |
-| **Multimodal AI** | Cross-modal mission assessment |
-| **Orbital Propagation** | Orbital and conjunction analysis |
-| **Physics-Based Analysis** | Mission and orbital reasoning |
-| **Simulation / Optimization** | Response analysis |
-| **Retrieval-Augmented Generation** | Grounded technical knowledge retrieval |
-| **Large Language Models** | Mission copilot capabilities |
+| **OpenCV / Computer Vision** | Infrared and thermal image analysis |
+| **Time-Series Analysis** | Telemetry analysis |
+| **Wavelet Signal Processing** | Wavefront signal analysis |
+| **Multimodal Fusion** | Mission-level assessment |
+| **Orbital Propagation / Physics** | Orbital and conjunction analysis |
+| **Retrieval-Augmented Generation (RAG)** | Grounded technical knowledge retrieval |
 
 ---
 
@@ -238,21 +232,19 @@ Wavefront ───────┤
 Orbital Data ────┤
 Space Weather ──┘
         ↓
- AI + Signal Processing
+Individual Analysis
         ↓
- Physics Analysis
+Persisted Mission Results
         ↓
- Multimodal Fusion
+Multimodal Fusion
         ↓
-  Mission Intelligence
+Mission-Level Assessment
         ↓
- Simulation / Optimization
+RAG Knowledge Retrieval
         ↓
-    Safety Layer
+Grounded Technical Evidence
         ↓
-  Mission Copilot
-        ↓
- Human Operator
+Operational Guidance
 ```
 
 ---
@@ -478,12 +470,17 @@ The RAG layer uses the current mission context so that retrieved information cor
 
 # ⚠️ Important Notes
 
-- Do **not** commit the `.venv` directory.
-- Install Python dependencies inside the virtual environment.
-- Run the backend and frontend in separate terminals.
-- The backend must be running for the frontend to retrieve live mission information.
-- Keep environment-specific configuration and secrets out of committed source code.
-- If the backend entry point differs from `backend.main:app` in your checkout, use the corresponding FastAPI module path.
+- **Use a Python virtual environment:** Create and activate `.venv` before installing backend dependencies. The `.venv` directory should remain excluded from Git.
+- **Backend and frontend run independently:** Start the FastAPI backend and Vite frontend in separate terminals during development.
+- **Backend availability:** The frontend expects the FastAPI backend to be running for API requests, mission data, analysis results, Multimodal Fusion, and RAG functionality.
+- **API configuration:** Keep backend API configuration consistent with the frontend API client. If the backend host or port changes, update the corresponding frontend configuration.
+- **Environment variables and secrets:** Do not commit API keys, credentials, tokens, or other environment-specific secrets to the repository.
+- **Python dependencies:** Install dependencies using `requirements.txt` inside the active virtual environment rather than relying on globally installed packages.
+- **Frontend dependencies:** Run `npm install` inside `frontend/` before starting the Vite development server if dependencies are not already installed.
+- **Mission context:** Fusion and RAG operations are mission-scoped. Ensure the correct mission is selected before executing or reviewing mission-level results.
+- **RAG knowledge:** The RAG layer uses the project's knowledge base to retrieve technical evidence. Retrieved knowledge should not be treated as direct sensor observations; Fusion remains responsible for the mission-level assessment.
+- **Development data:** Any demonstration or development knowledge/data included in the repository should not be interpreted as real spacecraft mission data.
+- **Analysis pipeline:** Individual modality analysis and Multimodal Fusion should remain independent of the RAG layer. Avoid modifying the existing analysis pipeline when extending the knowledge-retrieval layer.
 
 ---
 
