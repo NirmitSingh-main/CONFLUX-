@@ -376,7 +376,8 @@ It is used to flag risky solar and radiation conditions that may affect the miss
 
 ### Optional: regenerate synthetic datasets
 
-If you want fresh sample data instead of using the pre-generated CSVs, you can rerun the dataset generators.
+This step is optional and is only needed if you want fresh synthetic samples for experimentation or to recreate the generated datasets.
+It is not required for normal project startup, because the repo already includes the pre-generated CSV files.
 
 ```bash
 python data/wavefront/generate_dataset.py
