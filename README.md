@@ -10,6 +10,12 @@ CONFLUX brings these different sources together and uses AI, signal processing, 
 
 ---
 
+## 🤖 Built with IBM Bob
+
+CONFLUX was developed with the assistance of **IBM Bob**, an AI software engineering agent. Bob played a central role throughout the project — from scaffolding the FastAPI backend and SQLAlchemy database models to designing the deterministic multimodal fusion engine that correlates anomalies across five independent sensing modalities. Bob helped architect the RAG (Retrieval-Augmented Generation) pipeline used to ingest mission knowledge documents and surface contextually relevant references during operator queries. It also assisted in training and evaluating the Isolation Forest telemetry anomaly detector, implementing the wavefront optical aberration classifier, and writing the physics-based orbital conjunction analysis using linear closest-approach geometry. On the frontend, Bob built the full React/TypeScript interface including the mission-scoped state management, the Aceternity 3D Globe integration, and the real-time fusion results page. End-to-end test suites covering mission isolation, fusion logic, and backend validation were also written with Bob's help.
+
+---
+
 # 🚀 How CONFLUX Works
 
 ## 📡 Spacecraft Telemetry
